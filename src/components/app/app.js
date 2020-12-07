@@ -4,9 +4,13 @@ import Header from '../header';
 import RandomChar from '../randomChar';
 import './app.css';
 import ErrorMessage from '../errorMessage/errorMessage';
-import CharacterPage from '../characterPage/characterPage';
+import CharacterPage from '../pages/characterPage/characterPage';
+import HousesPage from '../pages/housesPage/housesPage';
+import BooksPage from '../pages/booksPage/booksPage';
+
 
 class App extends Component {
+
     state = {
         showRandom: true,
         error: false,
@@ -50,6 +54,8 @@ class App extends Component {
                         </Col>
                     </Row>
                     <CharacterPage />
+                    <HousesPage />
+                    <BooksPage />
                 </Container>
             </>
         );

@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
-import GotService from '../../services/services';
 import ErrorMessage from '../errorMessage/errorMessage';
 import Spinner from '../spinner/spinner';
 import './itemList.css';
 export default class ItemList extends Component {
-    gotService = new GotService();
 
     state = {
-        charlist: null,
+        itemList: null,
         error: false
     }
 
     componentDidMount() {
-        this.gotService.getAllCharacters()
-            .then(charlist => {
-                this.setState({ charlist })
+        const { getData } = this.props;
+
+        getData()
+            .then(itemList => {
+                this.setState({ itemList })
             })
 
     }
@@ -26,31 +26,33 @@ export default class ItemList extends Component {
     }
 
     renderItems(arr) {
-        return arr.map((item, i) => {
-            const id = +item.url.match(/\d/g).join('');
+        return arr.map((item) => {
+            const id = item.url.match(/([0-9]*)$/)[0];
+            const label = this.props.renderItem(item);
+
             return (
                 <li
                     key={id}
                     className="list-group-item"
-                    onClick={() => this.props.onCharSelected(id)}
+                    onClick={() => this.props.onItemSelected(id)}
                 >
-                    {item.name}
+                    {label}
                 </li>
             )
         })
     }
 
     render() {
-        const { charlist } = this.state;
+        const { itemList } = this.state;
 
         if (this.state.error) {
             return <ErrorMessage />
         }
 
-        if (!charlist) {
+        if (!itemList) {
             return <Spinner />
         }
-        const items = this.renderItems(charlist);
+        const items = this.renderItems(itemList);
         return (
             <ul className="item-list list-group">
                 {items}

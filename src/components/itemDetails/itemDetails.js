@@ -2,51 +2,51 @@ import React, { Component } from 'react';
 import GotService from '../../services/services';
 import ErrorMessage from '../errorMessage/errorMessage';
 import Spinner from '../spinner/spinner';
-import './charDetails.css';
+import './itemDetails.css';
 
-const Field = ({ char, field, label }) => {
+const Field = ({ item, field, label }) => {
     return (
         <li className="list-group-item d-flex justify-content-between">
             <span className="term">{label}</span>
-            <span>{char[field]}</span>
+            <span>{item[field]}</span>
         </li>
     )
 }
 export { Field };
 
-export default class CharDetails extends Component {
+export default class ItemDetails extends Component {
 
     gotService = new GotService();
 
     state = {
-        char: null,
+        item: null,
         loading: true,
         error: false
     }
 
-    updateChar() {
-        const { charId } = this.props;
-        if (!charId) return;
+    updateItem() {
+        const { itemId, getData } = this.props;
+        if (!itemId) return;
         this.setState({
             loading: true
         })
 
-        this.gotService.getCharacter(charId)
-            .then(char => {
+        getData(itemId)
+            .then(item => {
                 this.setState({
-                    char,
+                    item,
                     loading: false
                 });
             })
     }
 
     componentDidMount() {
-        this.updateChar();
+        this.updateItem();
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.charId !== prevProps.charId) {
-            this.updateChar();
+        if (this.props.itemId !== prevProps.itemId) {
+            this.updateItem();
         }
     }
 
@@ -58,8 +58,8 @@ export default class CharDetails extends Component {
 
     render() {
 
-        if (!this.state.char) {
-            return <span className="select-error">Please select a character</span>
+        if (!this.state.item) {
+            return <span className="select-error">Please select an item</span>
         }
 
         if (this.state.loading) {
@@ -69,15 +69,15 @@ export default class CharDetails extends Component {
         if (this.state.error) {
             return <ErrorMessage />
         }
-        const { char } = this.state;
-        const { name } = char;
+        const { item } = this.state;
+        const { name } = item;
         return (
             <div className="char-details rounded">
                 <h4>{name}</h4>
                 <ul className="list-group list-group-flush">
                     {
                         React.Children.map(this.props.children, (child) => {
-                            return React.cloneElement(child, { char })
+                            return React.cloneElement(child, { item })
                         })
                     }
                 </ul>

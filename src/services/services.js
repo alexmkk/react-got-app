@@ -2,7 +2,7 @@ export default class GotService {
     constructor() {
         this._apiBase = 'https://www.anapioficeandfire.com/api';
     }
-    async getResource(url) {
+    getResource = async (url) => {
         const res = await fetch(`${this._apiBase}${url}`);
 
         if (!res.ok) {
@@ -12,30 +12,34 @@ export default class GotService {
         return await res.json();
     };
 
-    async getAllCharacters() {
+    getAllCharacters = async () => {
         const res = await this.getResource('/characters?page=15&pageSize=10')
         return res.map(this._transformCharacter);
     }
 
-    async getCharacter(id) {
+    getCharacter = async (id) => {
         const res = await this.getResource(`/characters/${id}`);
         return this._transformCharacter(res);
     }
 
-    getAllBooks() {
-        return this.getResource('/books');
+    getAllBooks = async () => {
+        const res = await this.getResource('/books');
+        return res.map(this._transformBook);
     }
 
-    getBook(id) {
-        return this.getResource(`/books/${id}`);
+    getBook = async (id) => {
+        const book = await this.getResource(`/books/${id}`);
+        return this._transformBook(book);
     }
 
-    getAllHouses() {
-        return this.getResource('/houses');
+    getAllHouses = async () => {
+        const res = await this.getResource('/houses');
+        return res.map(this._transformHouse);
     }
 
-    getHouse(id) {
-        this.getResource(`/house/${id}`);
+    getHouse = async (id) => {
+        const house = await this.getResource(`/houses/${id}`);
+        return this._transformHouse(house);
     }
 
     _transformCharacter(char) {
@@ -56,7 +60,8 @@ export default class GotService {
             words: house.words || 'no data',
             titles: house.titles || 'no data',
             overlord: house.overlord || 'no data',
-            ancentralWeapons: house.ancentralWeapons || 'no data'
+            ancentralWeapons: house.ancentralWeapons || 'no data',
+            url: house.url || 'no data'
         }
     }
 
@@ -65,7 +70,8 @@ export default class GotService {
             name: book.name || 'no data',
             numberOfPages: book.numberOfPages || 'no data',
             publisher: book.publisher || 'no data',
-            released: book.released || 'no data'
+            released: book.released || 'no data',
+            url: book.url || 'no data'
         }
     }
 
