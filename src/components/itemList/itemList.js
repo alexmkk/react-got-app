@@ -1,40 +1,28 @@
-import React, { Component } from 'react';
-import ErrorMessage from '../errorMessage/errorMessage';
+import React, { useEffect, useState } from 'react';
 import Spinner from '../spinner/spinner';
 import './itemList.css';
-export default class ItemList extends Component {
+function ItemList({ getData, renderItem, onItemSelected }) {
 
-    state = {
-        itemList: null,
-        error: false
-    }
+    const [itemList, updateList] = useState([]);
 
-    componentDidMount() {
-        const { getData } = this.props;
-
+    useEffect(() => {
         getData()
-            .then(itemList => {
-                this.setState({ itemList })
+            .then(data => {
+                updateList(data)
             })
+    }, []);
 
-    }
 
-    componentDidCatch() {
-        this.setState({
-            error: true
-        });
-    }
-
-    renderItems(arr) {
+    function renderItems(arr) {
         return arr.map((item) => {
             const id = item.url.match(/([0-9]*)$/)[0];
-            const label = this.props.renderItem(item);
+            const label = renderItem(item);
 
             return (
                 <li
                     key={id}
                     className="list-group-item"
-                    onClick={() => this.props.onItemSelected(id)}
+                    onClick={() => onItemSelected(id)}
                 >
                     {label}
                 </li>
@@ -42,21 +30,15 @@ export default class ItemList extends Component {
         })
     }
 
-    render() {
-        const { itemList } = this.state;
-
-        if (this.state.error) {
-            return <ErrorMessage />
-        }
-
-        if (!itemList) {
-            return <Spinner />
-        }
-        const items = this.renderItems(itemList);
-        return (
-            <ul className="item-list list-group">
-                {items}
-            </ul>
-        );
+    if (!itemList) {
+        return <Spinner />
     }
+    const items = renderItems(itemList);
+    return (
+        <ul className="item-list list-group">
+            {items}
+        </ul>
+    )
 }
+
+export default ItemList;

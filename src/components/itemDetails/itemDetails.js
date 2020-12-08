@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import ErrorMessage from '../errorMessage/errorMessage';
-import Spinner from '../spinner/spinner';
 import './itemDetails.css';
 
 const Field = ({ item, field, label }) => {

@@ -39,7 +39,7 @@ class App extends Component {
             return <ErrorMessage />
         }
 
-        const char = this.state.showRandom ? <RandomChar /> : null;
+        const char = this.state.showRandom ? <RandomChar interval={15000} /> : null;
         return (
             <Router>
                 <div className="app">
