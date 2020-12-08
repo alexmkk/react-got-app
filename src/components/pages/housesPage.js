@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import ItemDetails, { Field } from '../../itemDetails/itemDetails'
-import ErrorMessage from '../../errorMessage/errorMessage';
-import ItemList from '../../itemList';
-import GotService from '../../../services/services';
-import RowBlock from '../../rowBlock/rowBlock';
+import ItemDetails, { Field } from '../itemDetails/itemDetails'
+import ErrorMessage from '../errorMessage/errorMessage';
+import ItemList from '../itemList';
+import GotService from '../../services/services';
+import RowBlock from '../rowBlock/rowBlock';
 
-export default class BooksPage extends Component {
+export default class HousesPage extends Component {
     gotService = new GotService();
 
     state = {
-        selectedItem: 1,
+        selectedItem: null,
         error: false
     }
 
@@ -33,19 +33,20 @@ export default class BooksPage extends Component {
         const itemList = (
             <ItemList
                 onItemSelected={this.onItemSelected}
-                getData={this.gotService.getAllBooks}
-                renderItem={({ name, numberOfPages }) => `${name} (${numberOfPages})`}
+                getData={this.gotService.getAllHouses}
+                renderItem={({ name, region }) => `${name} (${region})`}
             />
         )
 
         const itemDetails = (
             <ItemDetails
                 itemId={this.state.selectedItem}
-                getData={this.gotService.getBook}
+                getData={this.gotService.getHouse}
             >
-                <Field field='publisher' label='Publisher' />
-                <Field field='released' label='Released' />
-                <Field field='numberOfPages' label='Pages' />
+                <Field field='region' label='Region' />
+                <Field field='words' label='Words' />
+                <Field field='titles' label='Titles' />
+                <Field field='overlord' label='Overlord' />
             </ItemDetails>
         )
 

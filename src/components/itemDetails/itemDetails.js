@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import GotService from '../../services/services';
 import ErrorMessage from '../errorMessage/errorMessage';
 import Spinner from '../spinner/spinner';
 import './itemDetails.css';
@@ -16,28 +15,8 @@ export { Field };
 
 export default class ItemDetails extends Component {
 
-    gotService = new GotService();
-
     state = {
-        item: null,
-        loading: true,
-        error: false
-    }
-
-    updateItem() {
-        const { itemId, getData } = this.props;
-        if (!itemId) return;
-        this.setState({
-            loading: true
-        })
-
-        getData(itemId)
-            .then(item => {
-                this.setState({
-                    item,
-                    loading: false
-                });
-            })
+        item: null
     }
 
     componentDidMount() {
@@ -50,10 +29,14 @@ export default class ItemDetails extends Component {
         }
     }
 
-    componentDidCatch() {
-        this.setState({
-            error: true
-        });
+    updateItem() {
+        const { itemId, getData } = this.props;
+        if (!itemId) return;
+
+        getData(itemId)
+            .then(item => {
+                this.setState({ item });
+            })
     }
 
     render() {
@@ -62,13 +45,6 @@ export default class ItemDetails extends Component {
             return <span className="select-error">Please select an item</span>
         }
 
-        if (this.state.loading) {
-            return <Spinner />
-        }
-
-        if (this.state.error) {
-            return <ErrorMessage />
-        }
         const { item } = this.state;
         const { name } = item;
         return (
